@@ -78,3 +78,92 @@ gsutil cat gs://$DEVSHELL_PROJECT_ID/accommodation.csv
 
 ### Criando uma Intancia do DataProc
 
+- Buscar por SQL e na janela principal consultar a região e a zona onde a instacia de SQL foi criada, esta informaçãao se encontra na coluna **location**, a imagem abaixo é um exeplo da tela que você deve estar vendo:
+![Alt text](assets\sql_instance.png?raw=true)
+- Com essa informação, procure por DtaProc no menu de navegação e selecione este serviço, caso seja necessario, ative a API e do DataProc.
+- Na pagina do DataProc clique em adicionar Cluster e crie um cluster com os seguintes parametros:
+  - Nome: rentals
+  - Region: mesma região do cluster SQL
+  - Zona: mesma zona do cluster SQL
+  - clicar em Configurar node
+  - Para Master node, em Machine type, selecione n1-standard-2(2 vCPUs, 7.5 GB memory)
+  - Para Worker nodes, em Machine type, selecione n1-standard-2 (2 vCPUs, 7.5 GB memory)
+  - Deixe todos os outros parametros com o seu valor padrão e clique em Criar Cluster.
+
+- Em seguida abra o arquivo [conexao.sh](), copie o comando e rode em uma nova janela do Cloud Shell, para autorizar a conexão entre o Cloud DataProc e o Cloud SQL, se necessario modifique os parametros: CLUSTER, CLOUDSQL, ZONE e NWORKERS.
+- Quando o processamento for concluido, a mensagem na tela será a seguinte: Patching Cloud SQL instance...done.
+- Abra a instancia SQL e clicar em **rentals**, navegar até a sessão **Connect to this instance** e copie o seu endereço de IP publico, como mostra a figura abaixo
+![Alt text](assets\ip_address.png?raw=true)
+
+### Copiar o arquivo do modelo de Machine Learn
+
+- Usar o seguinte comando para copiar o arquivo com as instruções do modelo e abrir o editor de texto do cloud shell: \
+   gsutil cp gs://cloud-training/bdml/v2.0/model/train_and_apply.py train_and_apply.py
+   cloudshell edit train_and_apply.py
+- Quando o arquivo for aberto no editor, modifique a linha 30, trocando o endereço de IP pelo seu, e a linha 33, inserindo a sua senha do SQL no lugar da palavra 'root'.
+- Salve o arquivo clicando em file > save na barra de comandos do editor de texto e feche o arquivo.
+- Rode o seguinte comando no terminal, para copiar o arquivo editado para o seu bucket do Cloud Storage \
+   gsutil cp train_and_apply.py gs://$DEVSHELL_PROJECT_ID
+
+### Rodar o Job de ML no DataProc
+
+- No console do DataProc clique no cluster **rentals**
+- Clique em Enviar Job
+- informe os seguintes parametros:
+  - ID do job: O nome que voce quiser
+  - Região: A região do seu cluster
+  - Selecione o cluster **rentals**
+  - Tipo de Job: PySpark
+  - Arquivo Python principal: gs://<bucket-name>/train_and_apply.py (onde <bucket_name> é o nome do seu bucket e pose ser consultado no Claud Storage)
+  - Máximo de reinicializações por hora: 1
+- Clique em Enviar
+- A tela do Job corregará altomaticamente e você poderá acompanhar o Status do JOB até a sua conclusão.
+- Se tudo correr sem erros voce verá uma tela parecida com está: 
+![Alt text](assets\job_concluido.png?raw=true)
+
+### Explorando as linhas inseridas na tabela Recommendation
+
+- No cloud shell rodando o MySQL faça as seguintes querys:
+  - USE recommendation_spark;
+  - SELECT COUNT(*) AS count FROM Recommendation;
+  - SELECT
+        r.userid,
+        r.accommodationid,
+        r.prediction,
+        a.title,
+        a.location,
+        a.price,
+        a.rooms,
+        a.rating,
+        a.type
+    FROM Recommendation as r
+    JOIN Accommodation as a
+    ON r.accommodationid = a.id
+    WHERE r.userid = 10;
+
+### Exxportando as informações da tabela Recommendation
+
+- No instancia rentals do Cloud SQL clique em exportar
+- selecione CSV como tipo de arquivo
+- No local indicado cole a seguinte query \
+  SELECT * FROM REcommendation
+- Selecione o seu bucket e clique em Exportar
+- Repita o processo utilizando a seguinte Quary 
+  SELECT
+        r.userid,
+        r.accommodationid,
+        r.prediction,
+        a.title,
+        a.location,
+        a.price,
+        a.rooms,
+        a.rating,
+        a.type
+    FROM Recommendation as r
+    JOIN Accommodation as a
+    ON r.accommodationid = a.id;
+
+- Caso queira fazer o download dos arquivos, vá para Cloud Storage
+- Clique no seu bucket
+- E faça o download dos arquivos que deseja.
+  
