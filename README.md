@@ -97,7 +97,7 @@ gsutil cat gs://$DEVSHELL_PROJECT_ID/accommodation.csv
   - Para Worker nodes, em Machine type, selecione n1-standard-2 (2 vCPUs, 7.5 GB memory)
   - Deixe todos os outros parametros com o seu valor padrão e clique em Criar Cluster.
 
-- Em seguida abra o arquivo [conexao.sh](), copie o comando e rode em uma nova janela do Cloud Shell, para autorizar a conexão entre o Cloud DataProc e o Cloud SQL, se necessario modifique os parametros: CLUSTER, CLOUDSQL, ZONE e NWORKERS.
+- Em seguida abra o arquivo [conexao.sh](https://github.com/lilacostaro/google_quicklabs_Recommending_Products_Using_Cloud_SQL_and_Spark/blob/master/conexao.sh), copie o comando e rode em uma nova janela do Cloud Shell, para autorizar a conexão entre o Cloud DataProc e o Cloud SQL, se necessario modifique os parametros: CLUSTER, CLOUDSQL, ZONE e NWORKERS.
 - Quando o processamento for concluido, a mensagem na tela será a seguinte: Patching Cloud SQL instance...done.
 - Abra a instancia SQL e clicar em **rentals**, navegar até a sessão **Connect to this instance** e copie o seu endereço de IP publico, como mostra a figura abaixo
 ![Alt text](assets\ip_address.png?raw=true)
