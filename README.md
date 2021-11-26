@@ -22,7 +22,7 @@ Este projeto tem como objetivo gerar um modelo de machine learning que irá faze
   - clicar enter, caso a API necessaria não esteja ativada, ocorrerá um erro, e isso ira gerar um link para a API, depois de ativar a API é necessario gerar as credenciais.
   - Rodar o comando novamente, isso deve abrir o monitor do MySQL
   - usar o comando: SHOW DATABASES;
-  - usar o seguinte script [criar_tabelas.sql]()
+  - usar o seguinte script [criar_tabelas.sql](https://github.com/lilacostaro/google_quicklabs_Recommending_Products_Using_Cloud_SQL_and_Spark/blob/master/criar_tabelas.sql)
   - A ultima linha do script é o comando SHOW DATABESES, confirme se o database recommendation_spark aparece entre os databases do MySQL.
   - usar o seguinte comaando: USE recommendation_spark;
 SHOW TABLES;
@@ -34,14 +34,21 @@ SHOW TABLES;
 - Abrir uma nova aba do cloud shell e colar o seguinte comando: \
 echo "Creating bucket: gs://$DEVSHELL_PROJECT_ID"
 gsutil mb gs://$DEVSHELL_PROJECT_ID
+
 echo "Copying data to our storage from public dataset"
+
 gsutil cp gs://cloud-training/bdml/v2.0/data/accommodation.csv gs://$DEVSHELL_PROJECT_ID
+
 gsutil cp gs://cloud-training/bdml/v2.0/data/rating.csv gs://$DEVSHELL_PROJECT_ID
+
 echo "Show the files in our bucket"
+
 gsutil ls gs://$DEVSHELL_PROJECT_ID
+
 echo "View some sample data"
+
 gsutil cat gs://$DEVSHELL_PROJECT_ID/accommodation.csv
-- Este comando ira criar um novo bucket no cloud storage e carregará os arquivos [accommodation.csv]() e [rating.csv]() nele.
+- Este comando ira criar um novo bucket no cloud storage e carregará os arquivos [accommodation.csv](https://github.com/lilacostaro/google_quicklabs_Recommending_Products_Using_Cloud_SQL_and_Spark/blob/master/input_data/accommodation.csv) e [rating.csv](https://github.com/lilacostaro/google_quicklabs_Recommending_Products_Using_Cloud_SQL_and_Spark/blob/master/input_data/rating.csv) nele.
 
 ### Carregar os dados do Cloud Storage nas tabelas do Cloud SQL
 - Na tela do SQL clicar em rentals
@@ -165,5 +172,5 @@ gsutil cat gs://$DEVSHELL_PROJECT_ID/accommodation.csv
 
 - Caso queira fazer o download dos arquivos, vá para Cloud Storage
 - Clique no seu bucket
-- E faça o download dos arquivos que deseja.
+- Faça o download dos arquivos que deseja.
   
